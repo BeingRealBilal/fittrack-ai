@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String    @unique  // <-- Name is now the unique login!
+  password  String
+  workouts  Workout[]
+}
+
+model Workout {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  plan      String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
